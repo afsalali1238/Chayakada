@@ -52,21 +52,22 @@ export default function Player({ station, provider, onOpenSelector }: PlayerProp
         ytPlayerRef.current = new window.YT.Player("yt-player", {
           height: "0",
           width: "0",
-          videoId: isVideo ? videoIds[0] : undefined,
+          videoId: (!isCustomPlaylist && isVideo) ? videoIds[0] : undefined,
           playerVars: {
             playsinline: 1,
             controls: 0,
             autoplay: 1,
-            ...(isCustomPlaylist 
-              ? { playlist: videoIds.slice(1).join(',') } // Pass the rest of the videos as a playlist
-              : isVideo 
-                ? { loop: 1, playlist: videoIds[0] } // Loop single video
-                : { listType: "playlist", list: station.youtubePlaylistId }
+            ...(!isCustomPlaylist && isVideo 
+                ? { loop: 1, playlist: videoIds[0] } 
+                : (!isCustomPlaylist ? { listType: "playlist", list: station.youtubePlaylistId } : {})
             )
           },
           events: {
             onReady: (event: any) => {
-              // event.target.playVideo();
+              if (isCustomPlaylist) {
+                event.target.loadPlaylist(videoIds);
+                event.target.setLoop(true);
+              }
             },
             onStateChange: (event: any) => {
               if (event.data === window.YT.PlayerState.ENDED) {
