@@ -5,8 +5,8 @@ import { Station, stations, Provider } from "@/data/stations";
 import Background from "@/components/Background";
 import Header from "@/components/Header";
 import Player from "@/components/Player";
-import Overlay from "@/components/Overlay";
 import StationSelector from "@/components/StationSelector";
+import { useAudioEffects } from "@/hooks/useAudioEffects";
 
 export default function Home() {
   const [hasInteracted, setHasInteracted] = useState(true);
@@ -14,6 +14,8 @@ export default function Home() {
   const [station, setStation] = useState<Station>(stations[0]);
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+
+  const { playStatic, setRainVolume } = useAudioEffects();
 
   useEffect(() => {
     setIsMounted(true);
@@ -27,12 +29,28 @@ export default function Home() {
     }
   }, []);
 
+  // Handle rain volume based on current station
+  useEffect(() => {
+    if (hasInteracted) {
+      if (station.backgroundVariant === 'heavy-rain') setRainVolume(0.5);
+      else if (station.backgroundVariant === 'moody') setRainVolume(0.3);
+      else if (station.backgroundVariant === 'midnight') setRainVolume(0.1);
+      else if (station.backgroundVariant === 'sepia') setRainVolume(0.1);
+      else setRainVolume(0); // festive has no rain
+    }
+  }, [station.backgroundVariant, hasInteracted, setRainVolume]);
+
   const handleProviderChange = (newProvider: Provider) => {
     setProvider(newProvider);
     localStorage.setItem("chayakada-provider", newProvider);
   };
 
   const handleStationChange = (newStation: Station) => {
+    // Only play static if changing to a different station, and user has interacted
+    if (newStation.id !== station.id && hasInteracted) {
+      playStatic();
+    }
+    
     setStation(newStation);
     localStorage.setItem("chayakada-station", newStation.id);
     setIsSelectorOpen(false);
