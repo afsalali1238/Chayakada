@@ -61,7 +61,10 @@ export default function Player({ station, provider, onOpenSelector }: PlayerProp
               // event.target.playVideo();
             },
             onStateChange: (event: any) => {
-              if (event.data === window.YT.PlayerState.PLAYING) {
+              if (event.data === window.YT.PlayerState.ENDED) {
+                // Loop the video automatically when it ends
+                event.target.playVideo();
+              } else if (event.data === window.YT.PlayerState.PLAYING) {
                 setIsPlaying(true);
                 setDuration(event.target.getDuration());
                 
