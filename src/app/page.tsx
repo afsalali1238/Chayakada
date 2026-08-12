@@ -76,10 +76,7 @@ export default function Home() {
 
       {/* 5. Initial Overlay (Removed) */}
 
-      {/* 6. Footer signature */}
-      <div className="absolute bottom-4 right-4 z-20 text-white/30 text-xs font-light malayalam-text pointer-events-none drop-shadow-md hidden sm:block">
-        മഴ ആസ്വദിക്കൂ. പാട്ടും കേൾക്കൂ. (Enjoy the rain. Listen to the music.)
-      </div>
+      {/* 6. Footer signature (Removed) */}
 
     </main>
   );
