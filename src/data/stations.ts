@@ -23,8 +23,8 @@ export const stations: Station[] = [
     backgroundVariant: 'heavy-rain',
     spotifyPlaylistUrl: 'https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M', // placeholders
     spotifyPlaylistId: '37i9dQZF1DXcBWIGoYBM5M',
-    youtubePlaylistUrl: 'https://www.youtube.com/watch?v=Em3wmM8knO0',
-    youtubePlaylistId: 'Em3wmM8knO0',
+    youtubePlaylistUrl: 'https://www.youtube.com/watch?v=kHGGf1qk6lI',
+    youtubePlaylistId: 'kHGGf1qk6lI,Em3wmM8knO0,fNw_kP9zLUQ,fS-vBb8WGUA,KEPjic5G8Gc',
   },
   {
     id: 'pazhaya-radio',

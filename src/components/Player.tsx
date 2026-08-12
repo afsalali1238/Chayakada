@@ -44,17 +44,25 @@ export default function Player({ station, provider, onOpenSelector }: PlayerProp
           ytPlayerRef.current.destroy();
         }
         
-        const isVideo = station.youtubePlaylistId.length === 11;
+        // If there's a comma, it's a custom playlist of video IDs
+        const isCustomPlaylist = station.youtubePlaylistId.includes(',');
+        const videoIds = isCustomPlaylist ? station.youtubePlaylistId.split(',') : [station.youtubePlaylistId];
+        const isVideo = videoIds[0].length === 11;
         
         ytPlayerRef.current = new window.YT.Player("yt-player", {
           height: "0",
           width: "0",
-          videoId: isVideo ? station.youtubePlaylistId : undefined,
+          videoId: isVideo ? videoIds[0] : undefined,
           playerVars: {
             playsinline: 1,
             controls: 0,
             autoplay: 1,
-            ...(isVideo ? {} : { listType: "playlist", list: station.youtubePlaylistId })
+            ...(isCustomPlaylist 
+              ? { playlist: videoIds.slice(1).join(',') } // Pass the rest of the videos as a playlist
+              : isVideo 
+                ? { loop: 1, playlist: videoIds[0] } // Loop single video
+                : { listType: "playlist", list: station.youtubePlaylistId }
+            )
           },
           events: {
             onReady: (event: any) => {
@@ -62,8 +70,10 @@ export default function Player({ station, provider, onOpenSelector }: PlayerProp
             },
             onStateChange: (event: any) => {
               if (event.data === window.YT.PlayerState.ENDED) {
-                // Loop the video automatically when it ends
-                event.target.playVideo();
+                // For custom playlists, it automatically advances. For single videos, we manually loop.
+                if (!isCustomPlaylist) {
+                  event.target.playVideo();
+                }
               } else if (event.data === window.YT.PlayerState.PLAYING) {
                 setIsPlaying(true);
                 setDuration(event.target.getDuration());
