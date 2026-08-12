@@ -15,8 +15,9 @@ export function ParallaxBackground() {
     texture.repeat.set(1.0, 0.8);
     texture.offset.set(0.0, 0.05);
 
-    const croppedHeight = texture.image.height * 0.8;
-    const imgAspect = texture.image.width / croppedHeight;
+    const image = texture.image as HTMLImageElement;
+    const croppedHeight = image.height * 0.8;
+    const imgAspect = image.width / croppedHeight;
 
     const distance = 7; // camera z (5) - mesh z (-2)
     const vFov = ((camera as THREE.PerspectiveCamera).fov * Math.PI) / 180;

@@ -62,8 +62,8 @@ export function SteamParticles() {
   return (
     <points ref={pointsRef}>
       <bufferGeometry ref={geomRef}>
-        <bufferAttribute attach="attributes-position" count={count} array={positions} itemSize={3} />
-        <bufferAttribute attach="attributes-age" count={count} array={ages} itemSize={1} />
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-age" args={[ages, 1]} />
       </bufferGeometry>
       <pointsMaterial 
         color={0xcccccc} 
